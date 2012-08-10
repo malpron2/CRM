@@ -1,6 +1,7 @@
 package controlador;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import model.Secuencia;
 import model.Database;
@@ -30,9 +31,14 @@ public class FormProspecto extends Formulario {
 	// Asignar todos los valores y colocarlos en la base de datos
 	public void grabar() {
 		ArrayList<String> columnasValor = new ArrayList<String>();
-		Prospecto p = new Prospecto();
-		
+		Prospecto p = null;
+		// Si no es agregar, recuperar el registro a modificar
+		if (this.getModo() == this.AGREGAR)
+			p = new Prospecto();
+		else
+			p = this.db.getProspectos().get(0);
 		super.grabar();
+		
 		columnasValor = this.obtenerColumnasValor();
 		p.setNombres(columnasValor.get(1));
 		p.setApellidoPaterno(columnasValor.get(2));
@@ -42,19 +48,62 @@ public class FormProspecto extends Formulario {
 		p.setTelefono(columnasValor.get(6));
 		p.setFechaContacto(columnasValor.get(7));
 		
-		// Todos los datos se han ingresado, asignar el código
-		String seq_codigo = null;
-		seq_codigo = Secuencia.get("Prospecto");
-		p.setCodigo(seq_codigo);
-		System.out.println("0. "+this.obtenerColumnaEtiqueta(0)+" : "+seq_codigo);
-		
 		// Agregar registro
-		db.addProspecto(p);
-	}
-	
-	public void listar() {
-		for (Prospecto p : db.getProspectos()) {
-			System.out.println(p);
+		if (this.getModo() == this.AGREGAR) {
+			// Todos los datos se han ingresado, asignar el código
+			String seq_codigo = null;
+			seq_codigo = Secuencia.get("Prospecto");
+			p.setCodigo(seq_codigo);
+			System.out.println("0. "+this.obtenerColumnaEtiqueta(0)+" : "+seq_codigo);
+			
+			db.addProspecto(p);
 		}
 	}
+	
+	@Override
+	public void listar() {
+		int numero = 1;
+		boolean retorno = false;
+		super.listar();
+		// Mostrar la cabecera del listado
+		//System.out.println(String.format("%1$02d", numero) + ". "+pt.cabecera());
+		
+		// Leer todos los registros
+		for (Prospecto p : db.getProspectos()) {
+			//if (p.coincide(this.obtenerColumnasValor())) {
+			if (true) {
+				System.out.println(String.format("%1$02d", numero) + ". "+p);
+				numero++;
+				retorno = true;
+			}
+		}
+	}
+	
+	@Override
+	public void modificar() {
+		// Ubicar registro a modificar
+		Prospecto p = this.db.getProspectos().get(0);
+		this.asignarColumnaValor(0, p.getCodigo());
+		this.asignarColumnaValor(1, p.getNombres());
+		this.asignarColumnaValor(2, p.getApellidoPaterno());
+		this.asignarColumnaValor(3, p.getApellidoMaterno());
+		this.asignarColumnaValor(4, p.getEMail());
+		this.asignarColumnaValor(5, p.getDNI());
+		this.asignarColumnaValor(6, p.getTelefono());
+		this.asignarColumnaValor(7, p.getFechaContacto());
+		
+		// Modificar registro
+		super.modificar();
+	}
 }
+
+class ProspectoFechaContactoComparator implements Comparator { 
+
+public int compare(Object o1, Object o2) { 
+        Prospecto p1 = (Prospecto) o1; 
+        Prospecto p2 = (Prospecto) o2; 
+        return p1.getFechaContacto(). 
+                compareTo(p2.getFechaContacto()); 
+
+    } 
+} 

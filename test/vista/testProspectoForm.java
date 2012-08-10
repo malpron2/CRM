@@ -49,18 +49,18 @@ public class testProspectoForm {
 		ArrayList<String> input = new ArrayList<String>();
 		
 		// Simulacion de ingreso de datos
-		input.add("1");  // No se va a añadir, pero es necesario para que tenga la cantidad de elementos completa
-		input.add("Juan");
-		input.add("Perez");
-		input.add("Rojas");
-		input.add("juanperez@hotmail.com");
-		input.add("16201123");
-		input.add("720-1222");
-		input.add("01/01/2012");
+		input.add(null);  // No se va a añadir, pero es necesario para que tenga la cantidad de elementos completa
+		input.add("Juanito");
+		input.add(null);
+		input.add("Quispe");
+		input.add("juanito@hotmail.com");
+		input.add(null);
+		input.add(null);
+		input.add(null);
 		
 		// Modificar un prospecto existente
 		crmEngine.setProspectoInputArray(input);
-		crmEngine.nuevoProspecto();
+		crmEngine.modificaProspecto();
 		crmEngine.listarProspecto();
 	}
 }
