@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Prospecto {
 	private String codigo;
 	private String nombres;
@@ -91,4 +93,56 @@ public class Prospecto {
 			   "|";
 	}
 
+	// Recibe un arreglo con datos o nulos, debe coincidir con
+	// los datos del objeto para retornar true o
+	// los datos del arreglo deben ser todos nulos para retornar true
+	public boolean coincide(ArrayList<String> prospectoFiltroVal) {
+		boolean ret = true;
+		int i = 0;
+		// Recorrer el arreglo para comparar por indice
+		for (String s : prospectoFiltroVal) {
+			if (s != null && !s.isEmpty()) {
+				// Si cualquiera de las comparaciones es falsa, no cumple
+				switch(i) {
+				case 0:
+					ret = this.codigo.equals(s);
+					break;
+				case 1:
+					ret = this.nombres.equals(s);
+					break;
+				case 2:
+					ret = this.apellidoPaterno.equals(s);
+					break;
+				case 3:
+					ret = this.apellidoMaterno.equals(s);
+					break;
+				case 4:
+					ret = this.eMail.equals(s);
+					break;
+				case 5:
+					ret = this.DNI.equals(s);
+					break;
+				case 6:
+					ret = this.telefono.equals(s);
+					break;
+				case 7:
+					ret = this.fechaContacto.equals(s);
+					break;
+				case 8:
+					break;
+				case 9:
+					break;
+				case 10:
+					break;
+				case 11:
+					break;
+				case 12:
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		return ret;
+	}
 }

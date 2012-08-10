@@ -24,6 +24,10 @@ public class Formulario {
 	
 	private ArrayList<String> inputArray = null;
 	
+	public int getModo() {
+		return this.modo;
+	}
+	
 	// Grabar en base de datos (se debe implementar en cada herencia)
 	public void grabar() {
 	}
@@ -78,21 +82,27 @@ public class Formulario {
 					
 					// El tipo de dato se usará al momento de almacenar en la base de datos
 					
-					// Asignar el valor obtenido
-					this.columnasValor.set(i, dato);
+					// Asignar el valor obtenido, si es que distinto de nulo o vacio
+					if (dato != null && !dato.isEmpty()) {
+						this.columnasValor.set(i, dato);
+					}
 				}
 			}
 		}
 
 	}
 	
+	private void clearValues() {
+		for (String v : this.columnasValor) {
+			v = "";
+		}
+	}
+	
 	public void nuevo() {
 		// Prepara el buffer para el nuevo registro
 		this.modo = this.AGREGAR;
 		this.columnaActual = 0;
-		for (String v : this.columnasValor) {
-			v = "";
-		}
+		this.clearValues();
 		// Editar las columnas sin valores (nuevo registro)
 		this.editar(true);
 		this.grabar();
@@ -103,6 +113,7 @@ public class Formulario {
 		this.columnaActual = 0;
 		// Editar las columnas con valores (modificar registro)
 		this.editar(true);
+		this.grabar();
 	}
 	
 	public void eliminar() {
@@ -115,6 +126,8 @@ public class Formulario {
 	public void consultar() {
 		this.modo = this.CONSULTAR;
 		this.columnaActual = 0;
+		// Limpiar datos de formulario
+		this.clearValues();
 		// Editar las columnas para usar como filtro
 		this.editar(true);
 	}
@@ -122,6 +135,7 @@ public class Formulario {
 	public void listar() {
 		this.modo = this.LISTAR;
 		this.columnaActual = 0;
+		// Listar los registros filtrados
 	}
 
 	// Retorna la siguiente columna cuando se está en modo edición
@@ -177,6 +191,10 @@ public class Formulario {
 	
 	public ArrayList<String> obtenerColumnasValor() {
 		return this.columnasValor;
+	}
+	
+	public void asignarColumnasValor(ArrayList<String> p_columnasValor) {
+		this.columnasValor = p_columnasValor;
 	}
 	
 	public void setInputArray(ArrayList<String> p_inputArray) {

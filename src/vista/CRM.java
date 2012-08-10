@@ -240,4 +240,8 @@ public class CRM {
 	public void listarProspecto() {
 		formProspecto.listar();
 	}
+
+	public void modificaProspecto() {
+		formProspecto.modificar();
+	}
 }
