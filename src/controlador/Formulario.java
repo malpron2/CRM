@@ -16,12 +16,13 @@ public class Formulario {
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));        	
 	
 	private int modo = 0;
-	
 	final int AGREGAR = 1;
 	final int MODIFICAR = 2;
 	final int ELIMINAR = 3;
 	final int CONSULTAR = 4;
 	final int LISTAR = 5;
+	
+	private ArrayList<String> inputArray = null;
 	
 	// Grabar en base de datos (se debe implementar en cada herencia)
 	public void grabar() {
@@ -55,17 +56,23 @@ public class Formulario {
 			// Mostrar etiqueta de la columna a editar
 			if (this.columnasEditable.get(i).equals(""+true)) {
 				System.out.print(i+". "+this.columnasEtiqueta.get(i)+" : ");
-				if (this.columnasValor.get(i) != null || !this.columnasValor.get(i).isEmpty()) {
+				if (this.columnasValor.get(i) != null && !this.columnasValor.get(i).isEmpty()) {
 					System.out.print(this.columnasValor.get(i)+" : ");
 				}
 				
 				// Si el formulario es para editar (agregar, modificar)
 				if (p_editar) {
-					// Leer el valor de la columna desde el teclado
-					try {
-						dato = in.readLine();
-					} catch (IOException e) {
-						e.printStackTrace();
+					if (this.inputArray == null) {
+						// Leer el valor de la columna desde el teclado
+						try {
+							dato = in.readLine();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						// Tomar el valor del indice correspondiente
+						dato = this.inputArray.get(i);
+						System.out.println(dato);
 					}
 					// Dar formato de acuerdo al formato requerido
 					
@@ -88,6 +95,7 @@ public class Formulario {
 		}
 		// Editar las columnas sin valores (nuevo registro)
 		this.editar(true);
+		this.grabar();
 	}
 	
 	public void modificar() {
@@ -164,9 +172,14 @@ public class Formulario {
 		this.columnasTipo.add(p_tipo);
 		this.columnasFormato.add(p_formato);
 		this.columnasEditable.add(""+p_editable);
+		this.columnasValor.add(null);
 	}
 	
 	public ArrayList<String> obtenerColumnasValor() {
 		return this.columnasValor;
+	}
+	
+	public void setInputArray(ArrayList<String> p_inputArray) {
+		this.inputArray = p_inputArray;
 	}
 }

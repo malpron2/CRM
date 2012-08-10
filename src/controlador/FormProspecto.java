@@ -8,15 +8,22 @@ import model.Prospecto;
 
 // Clase para procesar los prospectos
 public class FormProspecto extends Formulario {
-	Prospecto prospectoRegistro = null;
 	Database db = null;
+	
+	public FormProspecto() {
+		// Definir las columnas del formulario
+		this.agregarColumna("Código", "codigo", "String", "", false);
+		this.agregarColumna("Nombre", "nombre", "String", "", true);
+		this.agregarColumna("Apellido Paterno", "apellidoPaterno", "String", "", true);
+		this.agregarColumna("Apellido Materno", "apellidoMaterno", "String", "", true);
+		this.agregarColumna("Correo electrónico", "eMail", "String", "", true);
+		this.agregarColumna("DNI", "DNI", "String", "", true);
+		this.agregarColumna("Teléfono", "telefono", "String", "", true);
+		this.agregarColumna("Fecha de Contacto", "fechaContacto", "String", "", true);
+	}
 	
 	public void setDatabase(Database p_database) {
 		this.db = p_database;
-	}
-	
-	public void asignarProspecto(Prospecto p_prospecto) {
-		this.prospectoRegistro = p_prospecto;
 	}
 	
 	@Override
@@ -43,6 +50,11 @@ public class FormProspecto extends Formulario {
 		
 		// Agregar registro
 		db.addProspecto(p);
-		
+	}
+	
+	public void listar() {
+		for (Prospecto p : db.getProspectos()) {
+			System.out.println(p);
+		}
 	}
 }

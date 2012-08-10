@@ -1,6 +1,11 @@
 package vista;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import controlador.FormProspecto;
 
 import model.Currency;
 import model.Database;
@@ -19,9 +24,11 @@ public class CRM {
 //	private ArrayList<Currency> foreignCurrencyList;
 	private String systemDateFormat;
 	private String systemDecimalFormat;
+	private FormProspecto formProspecto = new FormProspecto();
 	
 	public CRM() {
 		db = new Database();
+		formProspecto.setDatabase(db);
 	}
 	
 	public void setUser(String p_userName) {
@@ -47,7 +54,7 @@ public class CRM {
 		return ret;
 	}
 
-	public ArrayList menu() {
+	public ArrayList<String> menu() {
 		// Construye menu según permisos de usuario
 		int opcion = 1;
 		ArrayList<String> menuList = new ArrayList<String>();
@@ -115,7 +122,7 @@ public class CRM {
 		this.systemDecimalFormat = p_systemDecimalFormat;
 	}
 
-	public ArrayList opcion(String p_modulo) {
+	public ArrayList<String> opcion(String p_modulo) {
 		// Construye menu según permisos de usuario
 		int opcion = 1;
 		ArrayList<String> formList = new ArrayList<String>();
@@ -178,4 +185,59 @@ public class CRM {
 		return formList;
 	}
 
+	public String leerOpcionForm() {
+	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    ArrayList<Opcion> op = db.getOpciones();
+	    String dato = null;
+	    int opcion = -1;
+	    
+		// Leer el valor de la columna desde el teclado
+		try {
+			dato = in.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		opcion = Integer.parseInt(dato);
+		// Si la opcion es válida
+		if (opcion >= 0 && opcion < op.size()) {
+			// Retornar opcion encontrada
+			return op.get(opcion).getNombre();
+		}
+		
+		return "";
+	}
+
+	public String leerOpcionMenu() {
+	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    ArrayList<Modulo> mo = db.getModulos();
+	    String dato = null;
+	    int opcion = -1;
+	    
+		// Leer el valor de la columna desde el teclado
+		try {
+			dato = in.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		opcion = Integer.parseInt(dato);
+		// Si la opcion es válida
+		if (opcion >= 0 && opcion < mo.size()) {
+			// Retornar opcion encontrada
+			return mo.get(opcion).getNombre();
+		}
+		
+		return "";
+	}
+
+	public void nuevoProspecto() {
+		formProspecto.nuevo();
+	}
+	
+	public void setProspectoInputArray(ArrayList<String> p_prospectoInputArray) {
+		formProspecto.setInputArray(p_prospectoInputArray);
+	}
+
+	public void listarProspecto() {
+		formProspecto.listar();
+	}
 }

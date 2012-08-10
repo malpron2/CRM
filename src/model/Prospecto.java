@@ -74,4 +74,21 @@ public class Prospecto {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+	@Override
+	public String toString() {
+		String formato1 = "%1$-5s";
+		String formato2 = "%1$-15s";
+		String formato3 = "%1$-30s";
+
+		return "| " + String.format(formato1, this.codigo)+
+			   "| " + String.format(formato2, this.nombres)+
+			   "| " + String.format(formato2, this.apellidoPaterno)+
+			   "| " + String.format(formato2, this.apellidoMaterno)+
+			   "| " + String.format(formato3, this.eMail)+
+			   "| " + String.format(formato2, this.DNI)+
+			   "| " + String.format(formato2, this.telefono)+
+			   "| " + String.format(formato2, this.fechaContacto)+
+			   "|";
+	}
+
 }
