@@ -241,8 +241,14 @@ public class CRM {
 		formProspecto.listar();
 	}
 
-	public void modificaProspecto(int p_prospectoId) {
-		formProspecto.modificar(p_prospectoId);
+	public void modificaProspecto(int p_opcion) {
+		int prospectoId = -1;
+		prospectoId = formProspecto.getListadoIndex(p_opcion);
+		if (prospectoId >= 0) {
+			formProspecto.modificar(prospectoId);
+		}
+		else
+			System.out.println("Opción fuera de rango.");
 	}
 
 	public void buscarProspecto() {
@@ -251,5 +257,15 @@ public class CRM {
 	
 	public void resetSecuencias() {
 		this.db.resetSecuencias();
+	}
+
+	public void eliminarProspecto(int p_opcion) {
+		int prospectoId = -1;
+		prospectoId = formProspecto.getListadoIndex(p_opcion);
+		if (prospectoId >= 0) {
+			formProspecto.eliminar(prospectoId);
+		}
+		else
+			System.out.println("Opción fuera de rango.");
 	}
 }
