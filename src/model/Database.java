@@ -136,6 +136,14 @@ public class Database {
 		return prospectoData;
 	}
 	
+	public void addCliente(Cliente c) {
+		clienteData.add(c);
+	}
+	
+	public ArrayList<Cliente> getClientes() {
+		return clienteData;
+	}
+	
 	public void resetSecuencias() {
 		Secuencia.reset();
 	}

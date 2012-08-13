@@ -5,14 +5,14 @@ import java.util.Comparator;
 
 import model.Secuencia;
 import model.Database;
-import model.Prospecto;
+import model.Cliente;
 
 // Clase para procesar los prospectos
-public class FormProspecto extends Formulario {
+public class FormCliente extends Formulario {
 	Database db = null;
 	private ArrayList<Integer> listado = new ArrayList<Integer>();
 	
-	public FormProspecto() {
+	public FormCliente() {
 		// Definir las columnas del formulario
 		this.agregarColumna("Código", "codigo", "String", "", false);
 		this.agregarColumna("Nombre", "nombre", "String", "", true);
@@ -22,6 +22,7 @@ public class FormProspecto extends Formulario {
 		this.agregarColumna("DNI", "DNI", "String", "", true);
 		this.agregarColumna("Teléfono", "telefono", "String", "", true);
 		this.agregarColumna("Fecha de Contacto", "fechaContacto", "String", "", true);
+		this.agregarColumna("Fecha de Pase", "fechaPase", "String", "", true);
 	}
 	
 	public void setDatabase(Database p_database) {
@@ -30,20 +31,14 @@ public class FormProspecto extends Formulario {
 	
 	@Override
 	// Asignar todos los valores y colocarlos en la base de datos
-	public void grabar() {
-		this.grabar(-1);
-	}
-	
-	@Override
-	// Asignar todos los valores y colocarlos en la base de datos
 	public void grabar(int p_id) {
 		ArrayList<String> columnasValor = new ArrayList<String>();
-		Prospecto p = null;
+		Cliente p = null;
 		// Si no es agregar, recuperar el registro a modificar
 		if (this.getModo() == this.AGREGAR)
-			p = new Prospecto();
+			p = new Cliente();
 		else
-			p = this.db.getProspectos().get(p_id);
+			p = this.db.getClientes().get(p_id);
 		super.grabar(p_id);
 		
 		columnasValor = this.obtenerColumnasValor();
@@ -54,12 +49,13 @@ public class FormProspecto extends Formulario {
 		p.setDNI(columnasValor.get(5));
 		p.setTelefono(columnasValor.get(6));
 		p.setFechaContacto(columnasValor.get(7));
+		p.setFechaPase(columnasValor.get(8));
 		
 		// Agregar registro
 		if (this.getModo() == this.AGREGAR) {
 			// Todos los datos se han ingresado, asignar el código
 			String seq_codigo = null;
-			seq_codigo = Secuencia.get("Prospecto");
+			seq_codigo = Secuencia.get("Cliente");
 			p.setCodigo(seq_codigo);
 			System.out.println("0. "+this.obtenerColumnaEtiqueta(0)+" : "+seq_codigo);
 			
@@ -77,7 +73,7 @@ public class FormProspecto extends Formulario {
 		//System.out.println(String.format("%1$02d", numero) + ". "+pt.cabecera());
 		this.listado.clear();
 		// Leer todos los registros
-		for (Prospecto p : db.getProspectos()) {
+		for (Cliente p : db.getClientes()) {
 			if (p.coincide(this.obtenerColumnasValor())) {
 				this.listado.add(index);
 				System.out.println(String.format("%1$02d", numero) + ". "+p);
@@ -99,7 +95,7 @@ public class FormProspecto extends Formulario {
 	// Modifica el registro de base de datos indicado por el indice p_id
 	public void modificar(int p_id) {
 		// Ubicar registro a modificar
-		Prospecto p = this.db.getProspectos().get(p_id);
+		Cliente p = this.db.getClientes().get(p_id);
 		this.asignarColumnaValor(0, p.getCodigo());
 		this.asignarColumnaValor(1, p.getNombres());
 		this.asignarColumnaValor(2, p.getApellidoPaterno());
@@ -108,6 +104,7 @@ public class FormProspecto extends Formulario {
 		this.asignarColumnaValor(5, p.getDNI());
 		this.asignarColumnaValor(6, p.getTelefono());
 		this.asignarColumnaValor(7, p.getFechaContacto());
+		this.asignarColumnaValor(8, p.getFechaPase());
 		
 		// Modificar registro
 		super.modificar(p_id);
@@ -115,16 +112,16 @@ public class FormProspecto extends Formulario {
 	
 	public void eliminar(int p_id) {
 		// Ubicar registro a modificar
-		this.db.getProspectos().remove(p_id);
+		this.db.getClientes().remove(p_id);
 		super.eliminar(p_id);
 	}
 }
 
-class ProspectoFechaContactoComparator implements Comparator { 
+class ClienteFechaContactoComparator implements Comparator { 
 
 public int compare(Object o1, Object o2) { 
-        Prospecto p1 = (Prospecto) o1; 
-        Prospecto p2 = (Prospecto) o2; 
+        Cliente p1 = (Cliente) o1; 
+        Cliente p2 = (Cliente) o2; 
         return p1.getFechaContacto(). 
                 compareTo(p2.getFechaContacto()); 
 
