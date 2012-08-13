@@ -241,7 +241,15 @@ public class CRM {
 		formProspecto.listar();
 	}
 
-	public void modificaProspecto() {
-		formProspecto.modificar();
+	public void modificaProspecto(int p_prospectoId) {
+		formProspecto.modificar(p_prospectoId);
+	}
+
+	public void buscarProspecto() {
+		formProspecto.consultar();
+	}
+	
+	public void resetSecuencias() {
+		this.db.resetSecuencias();
 	}
 }
