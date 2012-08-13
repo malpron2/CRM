@@ -10,6 +10,7 @@ import model.Prospecto;
 // Clase para procesar los prospectos
 public class FormProspecto extends Formulario {
 	Database db = null;
+	private ArrayList<Integer> listado = new ArrayList<Integer>();
 	
 	public FormProspecto() {
 		// Definir las columnas del formulario
@@ -29,15 +30,15 @@ public class FormProspecto extends Formulario {
 	
 	@Override
 	// Asignar todos los valores y colocarlos en la base de datos
-	public void grabar() {
+	public void grabar(int p_id) {
 		ArrayList<String> columnasValor = new ArrayList<String>();
 		Prospecto p = null;
 		// Si no es agregar, recuperar el registro a modificar
 		if (this.getModo() == this.AGREGAR)
 			p = new Prospecto();
 		else
-			p = this.db.getProspectos().get(0);
-		super.grabar();
+			p = this.db.getProspectos().get(p_id);
+		super.grabar(p_id);
 		
 		columnasValor = this.obtenerColumnasValor();
 		p.setNombres(columnasValor.get(1));
@@ -63,21 +64,33 @@ public class FormProspecto extends Formulario {
 	@Override
 	public void listar() {
 		int numero = 1;
+		int index = 0;
 		boolean retorno = false;
 		super.listar();
 		// Mostrar la cabecera del listado
 		//System.out.println(String.format("%1$02d", numero) + ". "+pt.cabecera());
-		
+		this.listado.clear();
 		// Leer todos los registros
 		for (Prospecto p : db.getProspectos()) {
 			if (p.coincide(this.obtenerColumnasValor())) {
+				this.listado.add(index);
 				System.out.println(String.format("%1$02d", numero) + ". "+p);
 				numero++;
 				retorno = true;
 			}
+			index++;
 		}
 	}
 	
+	// Retorna el índice de base de datos que corresponde con
+	// el último listado emitido
+	public int getListadoIndex(int p_opcion) {
+		if (p_opcion <= this.listado.size() && p_opcion > 0)
+			return this.listado.get(p_opcion - 1);
+		return -1;
+	}
+	
+	// Modifica el registro de base de datos indicado por el indice p_id
 	public void modificar(int p_id) {
 		// Ubicar registro a modificar
 		Prospecto p = this.db.getProspectos().get(p_id);
@@ -91,7 +104,13 @@ public class FormProspecto extends Formulario {
 		this.asignarColumnaValor(7, p.getFechaContacto());
 		
 		// Modificar registro
-		this.modificar();
+		super.modificar(p_id);
+	}
+	
+	public void eliminar(int p_id) {
+		// Ubicar registro a modificar
+		this.db.getProspectos().remove(p_id);
+		super.eliminar(p_id);
 	}
 }
 
