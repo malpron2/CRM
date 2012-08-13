@@ -25,6 +25,7 @@ public class CRM {
 	private String systemDateFormat;
 	private String systemDecimalFormat;
 	private FormProspecto formProspecto = new FormProspecto();
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	public CRM() {
 		db = new Database();
@@ -91,7 +92,7 @@ public class CRM {
 	}
 
 	public void setCompanyName(String p_companyName) {
-		this.companyName = companyName;
+		this.companyName = p_companyName;
 	}
 
 	public double getIGV() {
@@ -267,5 +268,62 @@ public class CRM {
 		}
 		else
 			System.out.println("Opción fuera de rango.");
+	}
+
+	public void run() {
+		boolean ok = false;
+		String dato = null;
+		int intentos = 3;
+		String modulo = null;
+		String opcion = null;
+		
+		System.out.println(this.companyName);
+		do {
+			// Solicitar el usuario y la clave
+			System.out.print("Usuario : ");
+			try {
+				dato = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.setUser(dato);
+			System.out.print("Clave : ");
+			try {
+				dato = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.setPassword(dato);
+			
+			// Si la autenticacion es correcta
+			if (this.login())
+				// Continuar con la siguiente parte
+				break;
+			// Si no es valido, reingresar o salir
+		} while (intentos-- > 0);
+			
+		// Si fallo la autenticacion
+		if (intentos == 0)
+			// regresar o salir del sistema
+			return;
+			
+		do {
+			System.out.println(this.companyName);
+			for (String s : this.menu()) {
+				System.out.println(s);
+			}
+			System.out.print("Ingrese su opción : ");
+			modulo = this.leerOpcionMenu();
+			if (modulo != null) {
+				do {
+					System.out.println(this.companyName);
+					for (String s : this.opcion(modulo)) {
+						System.out.println(s);
+					}
+					System.out.print("Ingrese su opción");
+					opcion = this.leerOpcionForm();
+				} while (opcion != null);
+			}
+		} while (modulo != null);
 	}
 }
