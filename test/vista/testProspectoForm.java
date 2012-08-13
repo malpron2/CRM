@@ -40,10 +40,10 @@ public class testProspectoForm {
 		
 		// Simulacion de ingreso de datos
 		input.add("1");  // No se va a añadir, pero es necesario para que tenga la cantidad de elementos completa
-		input.add("Juan");
-		input.add("Perez");
-		input.add("Rojas");
-		input.add("juanperez@hotmail.com");
+		input.add("Gabriel");
+		input.add("Sanchez");
+		input.add("Huaman");
+		input.add("gabrielsanchez@hotmail.com");
 		input.add("16201123");
 		input.add("720-1222");
 		input.add("01/01/2012");

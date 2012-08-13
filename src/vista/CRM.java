@@ -187,12 +187,11 @@ public class CRM {
 	}
 
 	public String leerOpcionForm() {
-	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    ArrayList<Opcion> op = db.getOpciones();
 	    String dato = null;
 	    int opcion = -1;
 	    
-		// Leer el valor de la columna desde el teclado
+		// Leer el valor de la opcion desde el teclado
 		try {
 			dato = in.readLine();
 		} catch (IOException e) {
@@ -200,16 +199,15 @@ public class CRM {
 		}
 		opcion = Integer.parseInt(dato);
 		// Si la opcion es válida
-		if (opcion >= 0 && opcion < op.size()) {
+		if (opcion > 0 && opcion <= op.size()) {
 			// Retornar opcion encontrada
-			return op.get(opcion).getNombre();
+			return op.get(opcion-1).getNombre();
 		}
 		
 		return "";
 	}
 
 	public String leerOpcionMenu() {
-	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    ArrayList<Modulo> mo = db.getModulos();
 	    String dato = null;
 	    int opcion = -1;
@@ -222,9 +220,9 @@ public class CRM {
 		}
 		opcion = Integer.parseInt(dato);
 		// Si la opcion es válida
-		if (opcion >= 0 && opcion < mo.size()) {
+		if (opcion > 0 && opcion <= mo.size()) {
 			// Retornar opcion encontrada
-			return mo.get(opcion).getNombre();
+			return mo.get(opcion-1).getNombre();
 		}
 		
 		return "";
@@ -273,57 +271,133 @@ public class CRM {
 	public void run() {
 		boolean ok = false;
 		String dato = null;
+		int userIndex = -1;
 		int intentos = 3;
 		String modulo = null;
 		String opcion = null;
 		
-		System.out.println(this.companyName);
-		do {
-			// Solicitar el usuario y la clave
-			System.out.print("Usuario : ");
-			try {
-				dato = in.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			this.setUser(dato);
-			System.out.print("Clave : ");
-			try {
-				dato = in.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			this.setPassword(dato);
-			
-			// Si la autenticacion es correcta
-			if (this.login())
-				// Continuar con la siguiente parte
-				break;
-			// Si no es valido, reingresar o salir
-		} while (intentos-- > 0);
-			
-		// Si fallo la autenticacion
-		if (intentos == 0)
-			// regresar o salir del sistema
-			return;
-			
+		System.out.println("Bienvenido a nuestro servicio CRM");
 		do {
 			System.out.println(this.companyName);
-			for (String s : this.menu()) {
-				System.out.println(s);
+			do {
+				// Solicitar el usuario y la clave
+				System.out.print("Usuario : ");
+				try {
+					dato = in.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				this.setUser(dato);
+				if (dato == null || dato.isEmpty()) {
+					ok = false;
+					break;
+				}
+				
+				System.out.print("Clave : ");
+				try {
+					dato = in.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				this.setPassword(dato);
+				
+				// Si la autenticacion es correcta
+				if (this.login()) {
+					// Continuar con la siguiente parte
+					ok = true;
+					break;
+				}
+				else
+					System.out.println("Error en usuario o clave, intente nuevamente ("+intentos+")");
+				// Si no es valido, reingresar o salir
+			} while (intentos-- > 0);
+				
+			// Si fallo la autenticacion
+			if (intentos == 0) {
+				// regresar o salir del sistema
+				System.out.println("Ha excedido el número de intentos, reintente más tarde");
+				break;
 			}
-			System.out.print("Ingrese su opción : ");
-			modulo = this.leerOpcionMenu();
-			if (modulo != null) {
-				do {
-					System.out.println(this.companyName);
-					for (String s : this.opcion(modulo)) {
-						System.out.println(s);
-					}
-					System.out.print("Ingrese su opción");
-					opcion = this.leerOpcionForm();
-				} while (opcion != null);
-			}
-		} while (modulo != null);
+			
+			if (!ok)
+				break;
+			
+			do {
+				System.out.println(this.companyName);
+				for (String s : this.menu()) {
+					System.out.println(s);
+				}
+				System.out.print("Ingrese su opción : ");
+				modulo = this.leerOpcionMenu();
+				System.out.println("Modulo : ["+modulo+"]");
+				if (modulo != null && !modulo.isEmpty()) {
+					do {
+						System.out.println(this.companyName);
+						for (String s : this.opcion(modulo)) {
+							System.out.println(s);
+						}
+						System.out.print("Ingrese su opción : ");
+						opcion = this.leerOpcionForm();
+						//System.out.println("Opcion : ["+opcion+"]");
+						//System.out.println("Modulo : ["+modulo+"]");
+						// De acuerdo a la opción y el módulo
+						if (modulo.equals("Prospectos")) {
+							if (opcion == null || opcion.isEmpty())
+								break;
+							else if (opcion.equals("Agregar")) {
+								this.nuevoProspecto();
+							} else if (opcion.equals("Modificar")) {
+								this.buscarProspecto();	// usar datos para filtrar
+								this.listarProspecto();	// mostrar registros que se pueden modificar
+								
+								// Indicar registro a modificar
+								// Leer el valor de la columna desde el teclado
+								if (userIndex < 0) {
+									System.out.println("Registro a modificar : ");
+									try {
+										dato = in.readLine();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+									
+									userIndex = Integer.parseInt(dato);
+								}
+								
+								this.modificaProspecto(userIndex);	// modifica el prospecto indicado por el indice
+								userIndex = -1;
+							} else if (opcion.equals("Eliminar")) {
+								this.buscarProspecto();	// usar datos para filtrar
+								this.listarProspecto();	// mostrar registros que se pueden eliminar
+								
+								// Indicar registro a eliminar
+								// Leer el valor del registro desde el teclado
+								if (userIndex < 0) {
+									System.out.println("Registro a eliminar : ");
+									try {
+										dato = in.readLine();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+									
+									userIndex = Integer.parseInt(dato);
+								}
+								this.eliminarProspecto(userIndex);	// elimina el prospecto indicado por el indice
+								userIndex = -1;
+							} else if (opcion.equals("Buscar")) {
+								this.buscarProspecto();
+							} else if (opcion.equals("Listar")) {
+								this.listarProspecto();	// mostrar registros que se pueden eliminar
+							}
+						} else if (modulo == null || modulo.isEmpty()) {
+							opcion = null;
+							break;
+						}
+						
+					} while (opcion != null && !opcion.isEmpty());
+				}
+			} while (modulo != null && !modulo.isEmpty());
+			intentos = 3;
+		} while (intentos > 0);
+		System.out.println("Gracias por usar nuestro servicio.");
 	}
 }
