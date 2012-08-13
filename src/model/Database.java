@@ -125,11 +125,18 @@ public class Database {
 	}
 
 	public ArrayList<Opcion> getOpciones() {
-		// TODO Auto-generated method stub
 		return this.opcionData;
 	}
 
 	public void addProspecto(Prospecto p) {
 		prospectoData.add(p);
+	}
+
+	public ArrayList<Prospecto> getProspectos() {
+		return prospectoData;
+	}
+	
+	public void resetSecuencias() {
+		Secuencia.reset();
 	}
 }
