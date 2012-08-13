@@ -135,4 +135,8 @@ public class Database {
 	public ArrayList<Prospecto> getProspectos() {
 		return prospectoData;
 	}
+	
+	public void resetSecuencias() {
+		Secuencia.reset();
+	}
 }

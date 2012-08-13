@@ -93,9 +93,8 @@ public class Formulario {
 	}
 	
 	private void clearValues() {
-		for (String v : this.columnasValor) {
-			v = "";
-		}
+		for (int i = 0; i < this.columnasValor.size(); i++)
+			this.columnasValor.set(i, null);
 	}
 	
 	public void nuevo() {
@@ -106,6 +105,7 @@ public class Formulario {
 		// Editar las columnas sin valores (nuevo registro)
 		this.editar(true);
 		this.grabar();
+		this.clearValues();
 	}
 	
 	public void modificar() {
@@ -114,6 +114,7 @@ public class Formulario {
 		// Editar las columnas con valores (modificar registro)
 		this.editar(true);
 		this.grabar();
+		this.clearValues();
 	}
 	
 	public void eliminar() {
@@ -127,7 +128,7 @@ public class Formulario {
 		this.modo = this.CONSULTAR;
 		this.columnaActual = 0;
 		// Limpiar datos de formulario
-		this.clearValues();
+		//this.clearValues();
 		// Editar las columnas para usar como filtro
 		this.editar(true);
 	}

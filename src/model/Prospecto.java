@@ -142,6 +142,7 @@ public class Prospecto {
 					break;
 				}
 			}
+			i++;
 		}
 		return ret;
 	}

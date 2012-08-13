@@ -70,8 +70,7 @@ public class FormProspecto extends Formulario {
 		
 		// Leer todos los registros
 		for (Prospecto p : db.getProspectos()) {
-			//if (p.coincide(this.obtenerColumnasValor())) {
-			if (true) {
+			if (p.coincide(this.obtenerColumnasValor())) {
 				System.out.println(String.format("%1$02d", numero) + ". "+p);
 				numero++;
 				retorno = true;
@@ -79,10 +78,9 @@ public class FormProspecto extends Formulario {
 		}
 	}
 	
-	@Override
-	public void modificar() {
+	public void modificar(int p_id) {
 		// Ubicar registro a modificar
-		Prospecto p = this.db.getProspectos().get(0);
+		Prospecto p = this.db.getProspectos().get(p_id);
 		this.asignarColumnaValor(0, p.getCodigo());
 		this.asignarColumnaValor(1, p.getNombres());
 		this.asignarColumnaValor(2, p.getApellidoPaterno());
@@ -93,7 +91,7 @@ public class FormProspecto extends Formulario {
 		this.asignarColumnaValor(7, p.getFechaContacto());
 		
 		// Modificar registro
-		super.modificar();
+		this.modificar();
 	}
 }
 
