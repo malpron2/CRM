@@ -134,6 +134,7 @@ public class Formulario {
 		// Limpiar datos de formulario
 		//this.clearValues();
 		// Editar las columnas para usar como filtro
+		this.clearValues();
 		this.editar(true);
 	}
 

@@ -30,6 +30,12 @@ public class FormProspecto extends Formulario {
 	
 	@Override
 	// Asignar todos los valores y colocarlos en la base de datos
+	public void grabar() {
+		this.grabar(-1);
+	}
+	
+	@Override
+	// Asignar todos los valores y colocarlos en la base de datos
 	public void grabar(int p_id) {
 		ArrayList<String> columnasValor = new ArrayList<String>();
 		Prospecto p = null;
