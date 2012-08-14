@@ -44,6 +44,8 @@ public class Database {
 		prospectoData.add(new Prospecto("Susana","Chavez","Garcia","susanachavez@yahoo.com","16201123","720-1222","2012/03/09"));
 		prospectoData.add(new Prospecto("Mariela","Ugarte","Velez","marielaugarte@yahoo.com","12345667","720-1226","2012/11/24"));
 		
+		clienteData.add(new Cliente("Jose","Leon","Calderon","joseleon@yahoo.com","12345667","720-1226","2012/11/24","2012/11/24"));
+		
 		// Monedas
 		currencyData.add(new Currency("SOL", "S/.", 1.00));
 		currencyData.add(new Currency("DOL", "US$", 2.65));

@@ -33,33 +33,33 @@ public class FormCliente extends Formulario {
 	// Asignar todos los valores y colocarlos en la base de datos
 	public void grabar(int p_id) {
 		ArrayList<String> columnasValor = new ArrayList<String>();
-		Cliente p = null;
+		Cliente c = null;
 		// Si no es agregar, recuperar el registro a modificar
 		if (this.getModo() == this.AGREGAR)
-			p = new Cliente();
+			c = new Cliente();
 		else
-			p = this.db.getClientes().get(p_id);
+			c = this.db.getClientes().get(p_id);
 		super.grabar(p_id);
 		
 		columnasValor = this.obtenerColumnasValor();
-		p.setNombres(columnasValor.get(1));
-		p.setApellidoPaterno(columnasValor.get(2));
-		p.setApellidoMaterno(columnasValor.get(3));
-		p.setEMail(columnasValor.get(4));
-		p.setDNI(columnasValor.get(5));
-		p.setTelefono(columnasValor.get(6));
-		p.setFechaContacto(columnasValor.get(7));
-		p.setFechaPase(columnasValor.get(8));
+		c.setNombres(columnasValor.get(1));
+		c.setApellidoPaterno(columnasValor.get(2));
+		c.setApellidoMaterno(columnasValor.get(3));
+		c.setEMail(columnasValor.get(4));
+		c.setDNI(columnasValor.get(5));
+		c.setTelefono(columnasValor.get(6));
+		c.setFechaContacto(columnasValor.get(7));
+		c.setFechaPase(columnasValor.get(8));
 		
 		// Agregar registro
 		if (this.getModo() == this.AGREGAR) {
 			// Todos los datos se han ingresado, asignar el código
 			String seq_codigo = null;
 			seq_codigo = Secuencia.get("Cliente");
-			p.setCodigo(seq_codigo);
+			c.setCodigo(seq_codigo);
 			System.out.println("0. "+this.obtenerColumnaEtiqueta(0)+" : "+seq_codigo);
 			
-			db.addProspecto(p);
+			db.addCliente(c);
 		}
 	}
 	
