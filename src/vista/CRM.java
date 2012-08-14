@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import controlador.FormCliente;
 import controlador.FormProspecto;
 
 import model.Currency;
@@ -25,11 +26,13 @@ public class CRM {
 	private String systemDateFormat;
 	private String systemDecimalFormat;
 	private FormProspecto formProspecto = new FormProspecto();
+	private FormCliente formCliente = new FormCliente();
     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	public CRM() {
 		db = new Database();
 		formProspecto.setDatabase(db);
+		formCliente.setDatabase(db);
 	}
 	
 	public void setUser(String p_userName) {
@@ -231,13 +234,22 @@ public class CRM {
 	public void nuevoProspecto() {
 		formProspecto.nuevo();
 	}
+	public void nuevoCliente() {
+		formCliente.nuevo();
+	}
 	
 	public void setProspectoInputArray(ArrayList<String> p_prospectoInputArray) {
 		formProspecto.setInputArray(p_prospectoInputArray);
 	}
+	public void setClienteInputArray(ArrayList<String> p_clienteInputArray) {
+		formCliente.setInputArray(p_clienteInputArray);
+	}
 
 	public void listarProspecto() {
 		formProspecto.listar();
+	}
+	public void listarCliente() {
+		formCliente.listar();
 	}
 
 	public void modificaProspecto(int p_opcion) {
@@ -249,9 +261,22 @@ public class CRM {
 		else
 			System.out.println("Opción fuera de rango.");
 	}
+	
+	public void modificaCliente(int p_opcion) {
+		int clienteId = -1;
+		clienteId = formCliente.getListadoIndex(p_opcion);
+		if (clienteId >= 0) {
+			formCliente.modificar(clienteId);
+		}
+		else
+			System.out.println("Opción fuera de rango.");
+	}
 
 	public void buscarProspecto() {
 		formProspecto.consultar();
+	}
+	public void buscarCliente() {
+		formCliente.consultar();
 	}
 	
 	public void resetSecuencias() {
@@ -263,6 +288,15 @@ public class CRM {
 		prospectoId = formProspecto.getListadoIndex(p_opcion);
 		if (prospectoId >= 0) {
 			formProspecto.eliminar(prospectoId);
+		}
+		else
+			System.out.println("Opción fuera de rango.");
+	}
+	public void eliminarCliente(int p_opcion) {
+		int clienteId = -1;
+		clienteId = formCliente.getListadoIndex(p_opcion);
+		if (clienteId >= 0) {
+			formCliente.eliminar(clienteId);
 		}
 		else
 			System.out.println("Opción fuera de rango.");
@@ -329,7 +363,7 @@ public class CRM {
 				}
 				System.out.print("Ingrese su opción : ");
 				modulo = this.leerOpcionMenu();
-				System.out.println("Modulo : ["+modulo+"]");
+				//System.out.println("Modulo : ["+modulo+"]");
 				if (modulo != null && !modulo.isEmpty()) {
 					do {
 						System.out.println(this.companyName);
@@ -388,6 +422,53 @@ public class CRM {
 							} else if (opcion.equals("Listar")) {
 								this.listarProspecto();	// mostrar registros que se pueden eliminar
 							}
+						} else if (modulo.equals("Clientes")) {
+								if (opcion == null || opcion.isEmpty())
+									break;
+								else if (opcion.equals("Agregar")) {
+									this.nuevoCliente();
+								} else if (opcion.equals("Modificar")) {
+									this.buscarCliente();	// usar datos para filtrar
+									this.listarCliente();	// mostrar registros que se pueden modificar
+									
+									// Indicar registro a modificar
+									// Leer el valor de la columna desde el teclado
+									if (userIndex < 0) {
+										System.out.println("Registro a modificar : ");
+										try {
+											dato = in.readLine();
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+										
+										userIndex = Integer.parseInt(dato);
+									}
+									
+									this.modificaCliente(userIndex);	// modifica el prospecto indicado por el indice
+									userIndex = -1;
+								} else if (opcion.equals("Eliminar")) {
+									this.buscarCliente();	// usar datos para filtrar
+									this.listarCliente();	// mostrar registros que se pueden eliminar
+									
+									// Indicar registro a eliminar
+									// Leer el valor del registro desde el teclado
+									if (userIndex < 0) {
+										System.out.println("Registro a eliminar : ");
+										try {
+											dato = in.readLine();
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+										
+										userIndex = Integer.parseInt(dato);
+									}
+									this.eliminarCliente(userIndex);	// elimina el prospecto indicado por el indice
+									userIndex = -1;
+								} else if (opcion.equals("Buscar")) {
+									this.buscarCliente();
+								} else if (opcion.equals("Listar")) {
+									this.listarCliente();	// mostrar registros que se pueden eliminar
+								}
 						} else if (modulo == null || modulo.isEmpty()) {
 							opcion = null;
 							break;
@@ -400,4 +481,5 @@ public class CRM {
 		} while (intentos > 0);
 		System.out.println("Gracias por usar nuestro servicio.");
 	}
+		
 }
